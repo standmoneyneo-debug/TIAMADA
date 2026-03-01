@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Delícias da Tia Madá — Delivery</title>
+  <meta name="description" content="Delícias da Tia Madá — Delivery. Monte seu pedido no carrinho e finalize pelo WhatsApp." />
+  <meta name="theme-color" content="#0b0f14" />
+
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --card2:#f1f5f9;
+      --text:#0b1220;
+      --muted:#475569;
+      --brand:#f59e0b;
+      --brand2:#ef4444;
+      --ok:#16a34a;
+      --warn:#d97706;
+      --border:rgba(2,6,23,.14);
+      --shadow: 0 16px 40px rgba(2,6,23,.10);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(255,176,32,.22), transparent 55%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,77,90,.18), transparent 60%),
+        var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .container{max-width:1150px;margin:0 auto;padding:18px}
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(248,250,252,.92), rgba(248,250,252,.72));
+      border-bottom:1px solid var(--border);
+    }
+    .topbar-inner{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:12px 18px;max-width:1150px;margin:0 auto;}
+    .brand{display:flex;align-items:center;gap:12px;min-width:260px}
+    .logo{width:46px;height:46px;border-radius:999px;object-fit:cover;border:1px solid var(--border);background:#111}
+    .title{display:flex;flex-direction:column;line-height:1.05}
+    .title strong{font-size:14px;letter-spacing:.2px}
+    .title span{font-size:12px;color:var(--muted)}
+    .search{
+      flex:1;display:flex;max-width:520px;gap:10px;align-items:center;
+      padding:10px 12px;border-radius:14px;border:1px solid var(--border);
+      background: rgba(15,23,42,.03);
+    }
+    .search input{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
+    .actions{display:flex;gap:10px;align-items:center}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;background: rgba(15,23,42,.04);
+      border:1px solid var(--border);font-size:12px;white-space:nowrap;
+    }
+    .pill .dot{width:8px;height:8px;border-radius:999px;background:var(--warn)}
+    .pill.open .dot{background:var(--ok)}
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(15,23,42,.04);
+      color:var(--text);
+      padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:700;font-size:13px;
+      display:inline-flex;gap:8px;align-items:center;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,176,32,.95), rgba(255,77,90,.95));
+      color:#111;border:none;
+    }
+    .btn:active{transform: translateY(1px)}
+    .hero{
+      display:grid;grid-template-columns: 1.15fr .85fr;gap:16px;
+      padding:18px 0 4px;align-items:stretch;
+    }
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card h1{margin:0 0 8px;font-size:22px}
+    .card p{margin:0 0 14px;color:var(--muted);line-height:1.4}
+    .hero-grid{display:flex;flex-wrap:wrap;gap:10px}
+    .mini{
+      border:1px solid var(--border);
+      background: rgba(15,23,42,.03);
+      padding:10px 12px;border-radius:14px;
+      display:flex;flex-direction:column;gap:2px;min-width:190px;
+    }
+    .mini b{font-size:12px}
+    .mini span{font-size:12px;color:var(--muted)}
+    .notice{
+      padding:10px 12px;border-radius:14px;
+      border:1px dashed rgba(255,176,32,.45);
+      background: rgba(255,176,32,.08);
+      font-size:13px;line-height:1.35;
+    }
+    .info{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(18,27,39,.9), rgba(18,27,39,.55));
+      border-radius: var(--r);box-shadow: var(--shadow);
+      padding:18px;display:flex;flex-direction:column;gap:10px;
+    }
+    .line{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted)}
+    .line b{color:var(--text);font-weight:750}
+    .closed{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(245,158,11,.45);
+      background: rgba(245,158,11,.12);
+      font-size:13px;line-height:1.35;
+    }
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;padding:14px 0 2px}
+    .chip{
+      padding:10px 12px;border-radius:999px;border:1px solid var(--border);
+      background: rgba(15,23,42,.03);font-size:13px;cursor:pointer;user-select:none;
+    }
+    .chip.active{background: rgba(255,176,32,.16);border-color: rgba(255,176,32,.35)}
+    .grid{display:grid;grid-template-columns: repeat(3, minmax(0, 1fr));gap:14px;padding:14px 0 112px}
+    .item{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(15,22,32,.92), rgba(15,22,32,.55));
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;flex-direction:column;min-height:320px;
+    }
+    .thumb{width:100%;height:160px;background:#0b0f14;position:relative}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .badge{
+      position:absolute;top:10px;left:10px;
+      padding:6px 10px;border-radius:999px;
+      background: rgba(0,0,0,.55);border:1px solid var(--border);
+      font-size:12px;
+    }
+    .content{padding:12px 12px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+    .name{font-weight:850;font-size:15px}
+    .desc{font-size:12.5px;color:var(--muted);line-height:1.35;min-height:34px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+    .price{font-weight:900;font-size:15px}
+    .qty{display:flex;align-items:center;gap:8px}
+    .iconbtn{
+      width:36px;height:36px;border-radius:12px;border:1px solid var(--border);
+      background: rgba(2,6,23,.04);color:var(--text);
+      cursor:pointer;font-weight:900;display:grid;place-items:center;
+    }
+
+    .cart-fab{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;gap:10px;align-items:center}
+    .fab{
+      border:none;background: linear-gradient(135deg, rgba(255,176,32,.95), rgba(255,77,90,.95));
+      color:#111;padding:14px 16px;border-radius:16px;cursor:pointer;box-shadow: var(--shadow);
+      font-weight:950;display:flex;gap:10px;align-items:center;
+    }
+    .count{background: rgba(0,0,0,.18);padding:6px 10px;border-radius:999px;font-weight:950}
+    .backdrop{position:fixed;inset:0;background: rgba(0,0,0,.55);display:none;z-index:70}
+    .drawer{
+      position:fixed;right:0;top:0;height:100%;width:min(420px, 92vw);
+      background: linear-gradient(180deg, rgba(11,15,20,.98), rgba(11,15,20,.92));
+      border-left:1px solid var(--border);box-shadow: var(--shadow);
+      transform: translateX(100%);transition:.25s ease;
+      z-index:80;display:flex;flex-direction:column;
+    }
+    .drawer.open{transform: translateX(0)}
+    .backdrop.open{display:block}
+    .dhead{padding:14px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+    .dhead b{font-size:15px}
+    .dbody{padding:12px 14px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+    .lineitem{
+      border:1px solid var(--border);background: rgba(15,23,42,.03);
+      border-radius: 16px;padding:10px;
+      display:grid;grid-template-columns: 52px 1fr auto;gap:10px;align-items:center;
+    }
+    .lineitem img{width:52px;height:52px;border-radius:14px;object-fit:cover;border:1px solid var(--border)}
+    .li-title{font-weight:850;font-size:13px}
+    .li-sub{font-size:12px;color:var(--muted)}
+    .li-actions{display:flex;align-items:center;gap:8px}
+    .small{width:32px;height:32px;border-radius:12px}
+    .trash{background: rgba(255,77,90,.12);border-color: rgba(255,77,90,.35)}
+    .dfoot{padding:12px 14px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+    .totals{
+      border:1px solid var(--border);background: rgba(15,23,42,.03);
+      border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;
+      font-size:13px;color:var(--muted);
+    }
+    .totals .trow{display:flex;justify-content:space-between;gap:10px}
+    .totals .trow b{color:var(--text)}
+    textarea{
+      width:100%;min-height:70px;resize:vertical;border-radius:16px;
+      border:1px solid var(--border);background: rgba(15,23,42,.02);
+      color:var(--text);padding:10px 12px;outline:none;font-size:13px;
+    }
+    .subnote{border-color: rgba(255,255,255,.14)!important;background: rgba(255,255,255,.03)!important}
+
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns: repeat(2, minmax(0, 1fr))}
+      .search{display:none}
+      .brand{min-width:auto}
+    }
+    @media (max-width: 560px){
+      .grid{grid-template-columns:1fr}
+      .topbar-inner{gap:10px}
+    }
+  
+    /* Modal checkout */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background: rgba(15,23,42,.45);
+      display:none; z-index:90;
+    }
+    .modal{
+      position:fixed; inset:0;
+      display:none; z-index:100;
+      padding:18px;
+      overflow:auto;
+    }
+    .modal.open, .modal-backdrop.open{display:block}
+    .modal-card{
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      padding:14px 14px;
+      border-bottom:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.85));
+    }
+    .modal-title{font-weight:900; font-size:16px}
+    .modal-sub{color:var(--muted); font-size:13px; margin-top:2px}
+    .form{padding:14px; display:flex; flex-direction:column; gap:12px}
+    .grid2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    .field{display:flex; flex-direction:column; gap:6px}
+    .field span{font-size:12px; color:var(--muted); font-weight:800}
+    .field input, .field select, .field textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(15,23,42,.03);
+      padding:11px 12px;
+      font-size:14px;
+      color:var(--text);
+      outline:none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus{
+      border-color: rgba(255,176,32,.65);
+      box-shadow: 0 0 0 4px rgba(255,176,32,.18);
+    }
+    .form-actions{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    .form-actions .btn{flex:1}
+    .form-hint{font-size:12px; color:var(--muted)}
+    @media (max-width: 680px){
+      .grid2{grid-template-columns:1fr}
+      .form-actions .btn{flex:auto}
+    }
+
+  
+    /* Clareza / contraste (UI) */
+    .brand .title strong{font-size:15px}
+    .brand .title span{font-size:12.5px}
+    .pill{background: rgba(2,6,23,.04)}
+    .btn{background: rgba(2,6,23,.04)}
+    .btn:hover{background: rgba(2,6,23,.06)}
+    .btn.primary:hover{filter: brightness(1.02)}
+    .search{background: rgba(2,6,23,.03)}
+    .search input::placeholder{color: rgba(71,85,105,.8)}
+    .card{background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(241,245,249,.72))}
+    .info{background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(241,245,249,.78))}
+    .notice{border-color: rgba(245,158,11,.55); background: rgba(245,158,11,.10)}
+    .chip{background: rgba(2,6,23,.03)}
+    .chip.active{background: rgba(245,158,11,.18); border-color: rgba(245,158,11,.55)}
+    .item{background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(241,245,249,.70))}
+    .thumb{background: rgba(2,6,23,.04)}
+    .badge{background: rgba(245,158,11,.92); color:#0b1220; border-color: rgba(245,158,11,.65); font-weight:900}
+    .price{color: rgba(239,68,68,.95)}
+    .desc{color: rgba(71,85,105,.95)}
+    .drawer{background: linear-gradient(180deg, rgba(248,250,252,.98), rgba(241,245,249,.92))}
+    .backdrop{background: rgba(2,6,23,.45)}
+    .lineitem{background: rgba(2,6,23,.03)}
+    .totals{background: rgba(2,6,23,.03)}
+    textarea{background: rgba(2,6,23,.02)}
+    .modal-backdrop{background: rgba(2,6,23,.45)}
+    .modal-head{background: linear-gradient(180deg, rgba(248,250,252,.98), rgba(241,245,249,.92))}
+
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img class="logo" src="logo.jpg" alt="Logo Delícias da Tia Madá" />
+        <div class="title">
+          <strong>Delícias da Tia Madá</strong>
+          <span>Delivery e atendimento presencial</span>
+        </div>
+      </div>
+
+      <div class="search" title="Buscar no cardápio">
+        🔎 <input id="searchInput" type="search" placeholder="Buscar… (ex: batata, caldo, cerveja)" />
+      </div>
+
+      <div class="actions">
+        <div id="statusPill" class="pill">
+          <span class="dot"></span>
+          <span id="statusText">Verificando horário…</span>
+        </div>
+        <button class="btn" id="btnInfo" type="button">📍 Info</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="card">
+        <h1>Delivery profissional: carrinho + total + WhatsApp ✅</h1>
+        <p>
+          Monte seu pedido aqui no site e finalize pelo WhatsApp com a mensagem já formatada.
+          Funciona perfeito no celular e no computador.
+        </p>
+
+        <div class="hero-grid">
+          <div class="mini">
+            <b>Horário</b>
+            <span>Qua a Sáb — 19:00 às 23:00</span>
+          </div>
+          <div class="mini">
+            <b>WhatsApp</b>
+            <span>(38) 99912-5601</span>
+          </div>
+          <div class="mini">
+            <b>Endereço</b>
+            <span>Rua Roraima, 232 — N. Sra. de Fátima</span>
+          </div>
+        </div>
+
+        <div id="closedBanner" class="closed">
+          ⏰ Agora estamos <b>fechados</b>. Você pode ver o cardápio, mas o botão de finalizar pedido fica bloqueado fora do horário.
+        </div>
+      </div>
+
+      <aside class="info">
+        <div class="notice">
+          <b>Como pedir:</b> adicione itens → confira o carrinho → escreva observações → <b>Finalizar no WhatsApp</b>.
+        </div>
+        <div class="line"><span>Taxa de entrega</span><b id="feeTop">R$ 2,00</b></div>
+        <div class="line"><span>Pagamento</span><b>Pix • Crédito • Débito</b></div>
+        <div class="line"><span>Retirada</span><b>Disponível</b></div>
+        <button class="btn primary" id="btnScrollMenu" type="button">🍽️ Ver cardápio</button>
+        <button class="btn" id="btnCall" type="button">📲 Chamar no WhatsApp</button>
+        <div class="notice subnote">
+          <b>Endereço:</b> Rua Roraima, nº 232 — Nossa Senhora de Fátima — Itacarambi/MG
+        </div>
+      </aside>
+    </section>
+
+    <section class="tabs" id="tabs"></section>
+    <section class="grid" id="menuGrid" aria-label="Cardápio"></section>
+  </main>
+
+  <div class="cart-fab">
+    <button class="fab" id="openCart" type="button" aria-label="Abrir carrinho">
+      🛒 Carrinho <span class="count" id="cartCount">0</span>
+    </button>
+  </div>
+
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="drawer" aria-label="Carrinho">
+    <div class="dhead">
+      <b>Seu carrinho</b>
+      <button class="btn" id="closeCart" type="button">✖</button>
+    </div>
+
+    <div class="dbody" id="cartItems"></div>
+
+    <div class="dfoot">
+      <div class="totals">
+        <div class="trow"><span>Subtotal</span><b id="subtotalText">R$ 0,00</b></div>
+        <div class="trow"><span>Taxa de entrega</span><b id="feeText">R$ 0,00</b></div>
+        <div class="trow"><span>Total</span><b id="totalText">R$ 0,00</b></div>
+      </div>
+
+      <textarea id="notes" placeholder="Observações (ex: sem cebola, bem passado, trocar bebida, etc.)"></textarea>
+
+      <button class="btn primary" id="checkoutBtn" type="button">✅ Finalizar no WhatsApp</button>
+      <button class="btn" id="clearBtn" type="button">🧹 Limpar carrinho</button>
+
+      <div class="notice subnote">
+        <b>Importante:</b> informe no WhatsApp o <b>endereço para entrega</b> e a <b>forma de pagamento</b>.
+      </div>
+    </div>
+  </aside>
+
+
+  <!-- Checkout Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"></div>
+  <section class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title" id="checkoutTitle">Finalizar pedido</div>
+          <div class="modal-sub">Preencha os dados para enviar o pedido no WhatsApp.</div>
+        </div>
+        <button class="btn" id="closeModal" type="button">✖</button>
+      </div>
+
+      <form class="form" id="checkoutForm">
+        <div class="grid2">
+          <label class="field">
+            <span>Nome *</span>
+            <input id="cName" type="text" autocomplete="name" required placeholder="Ex: Maria Silva" />
+          </label>
+
+          <label class="field">
+            <span>Telefone (opcional)</span>
+            <input id="cPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Ex: (38) 9xxxx-xxxx" />
+          </label>
+        </div>
+
+        <div class="grid2">
+          <label class="field">
+            <span>Entrega ou Retirada? *</span>
+            <select id="cMode" required>
+              <option value="Entrega">Entrega</option>
+              <option value="Retirada">Retirada no local</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Forma de pagamento *</span>
+            <select id="cPay" required>
+              <option value="Pix">Pix</option>
+              <option value="Cartão (Crédito)">Cartão (Crédito)</option>
+              <option value="Cartão (Débito)">Cartão (Débito)</option>
+              <option value="Dinheiro">Dinheiro</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid2" id="addrRow">
+          <label class="field" style="grid-column: 1 / -1;">
+            <span>Endereço completo *</span>
+            <input id="cAddress" type="text" autocomplete="street-address" placeholder="Rua, nº, bairro" />
+          </label>
+
+          <label class="field">
+            <span>Complemento (opcional)</span>
+            <input id="cComp" type="text" placeholder="Apto, casa, ponto de referência" />
+          </label>
+
+          <label class="field">
+            <span>Referência (opcional)</span>
+            <input id="cRef" type="text" placeholder="Ex: perto da igreja" />
+          </label>
+        </div>
+
+        <div class="grid2" id="changeRow">
+          <label class="field">
+            <span>Precisa de troco?</span>
+            <select id="cNeedChange">
+              <option value="Não">Não</option>
+              <option value="Sim">Sim</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Troco para (R$)</span>
+            <input id="cChangeFor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex: 100" disabled />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Observações (opcional)</span>
+          <textarea id="cObs" placeholder="Ex: sem cebola, bem passado..."></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button class="btn" type="button" id="backToCart">← Voltar</button>
+          <button class="btn primary" type="submit" id="sendWhats">✅ Enviar no WhatsApp</button>
+        </div>
+
+        <div class="form-hint">
+          * Campos obrigatórios. Seus dados ficam apenas no seu aparelho (não enviamos para servidor).
+        </div>
+      </form>
+    </div>
+  </section>
+
+
+  <script>
+    const RESTAURANT = {
+      name: "Delícias da Tia Madá",
+      whatsapp: "5538999125601",
+      whatsappDisplay: "(38) 99912-5601",
+      address: "Rua Roraima, nº 232 — Nossa Senhora de Fátima — Itacarambi/MG",
+      schedule: { openDays: [3,4,5,6], openHour: 19, closeHour: 23 },
+      deliveryFee: 2.00,
+      currency: "BRL"
+    };
+
+    // Cardápio (valores dos cartazes + bebidas com preço justo)
+    const MENU = [
+      // PETISCOS / PORÇÕES
+      { id:"peixe_p", cat:"Petiscos", name:"Peixe frito (P)", desc:"Porção pequena.", price:20.00, img:"peixe-frito.jpg", tag:"Terça dos petiscos" },
+      { id:"peixe_g", cat:"Petiscos", name:"Peixe frito (G)", desc:"Porção grande.", price:40.00, img:"peixe-frito.jpg" },
+
+      { id:"carne_fritas_p", cat:"Petiscos", name:"Carne c/ fritas (P)", desc:"Porção pequena.", price:38.00, img:"1426030823ggiicc8kab.webp", tag:"Mais vendido" },
+      { id:"carne_fritas_g", cat:"Petiscos", name:"Carne c/ fritas (G)", desc:"Porção grande.", price:55.00, img:"1426030823ggiicc8kab.webp" },
+
+      { id:"iscas_p", cat:"Petiscos", name:"Iscas de frango (P)", desc:"Porção pequena.", price:20.00, img:"frango-frito.jpg" },
+      { id:"iscas_g", cat:"Petiscos", name:"Iscas de frango (G)", desc:"Porção grande.", price:30.00, img:"frango-frito.jpg" },
+
+      { id:"batata_p", cat:"Petiscos", name:"Batata c/ cheddar e bacon (P)", desc:"Porção pequena.", price:20.00, img:"batata-cheddar-bacon.jpg" },
+      { id:"batata_g", cat:"Petiscos", name:"Batata c/ cheddar e bacon (G)", desc:"Porção grande.", price:30.00, img:"batata-cheddar-bacon.jpg", tag:"Top" },
+
+      { id:"farofa_p", cat:"Petiscos", name:"Farofa de carne (P)", desc:"Porção pequena.", price:20.00, img:"Farofa-de-carne-assada.jpg" },
+      { id:"farofa_g", cat:"Petiscos", name:"Farofa de carne (G)", desc:"Porção grande.", price:30.00, img:"Farofa-de-carne-assada.jpg" },
+
+      // CALDOS (R$12 no cartaz)
+      { id:"caldo_kenga", cat:"Caldos", name:"Caldo de Kenga c/ queijo", desc:"Quentinho e bem temperado.", price:12.00, img:"caldo kenga.png", tag:"Quentinho" },
+      { id:"caldo_feijao", cat:"Caldos", name:"Caldo de feijão c/ torresmo", desc:"Cremoso com torresmo.", price:12.00, img:"CALDOdefeijão.webp" },
+      { id:"caldo_capim", cat:"Caldos", name:"Caldo Capim Canela", desc:"Caldinho caseiro.", price:12.00, img:"capincanela.jpg" },
+      { id:"caldo_dobradinha", cat:"Caldos", name:"Dobradinha c/ feijão branco", desc:"Caldinho reforçado.", price:12.00, img:"dobradinha.webp" },
+
+      // PRATOS
+      { id:"alm_p", cat:"Pratos", name:"Almôndegas ao molho (P)", desc:"Porção pequena.", price:20.00, img:"macarrãobolonhesa.jpeg" },
+      { id:"alm_g", cat:"Pratos", name:"Almôndegas ao molho (G)", desc:"Porção grande.", price:30.00, img:"macarrãobolonhesa.jpeg" },
+
+      { id:"carne_mandioca", cat:"Pratos", name:"Carne serenada c/ mandioca cozida", desc:"Porção reforçada.", price:60.00, img:"iscas-frango.jpg", tag:"Especial" },
+
+      // MARMITAS (cartaz mostra R$20,00)
+      { id:"marmita_feijoada", cat:"Marmitas", name:"Marmita de Feijoada", desc:"Arroz, feijoada, couve, farofa, vinagrete e laranja.", price:20.00, img:"feijoada.jpg", tag:"Do dia" },
+
+      // BEBIDAS (preço justo)
+      { id:"coca", cat:"Bebidas", name:"Coca-Cola (lata 350ml)", desc:"Bem gelada.", price:7.00, img:"coca-350.png" },
+      { id:"guarana", cat:"Bebidas", name:"Guaraná Antarctica (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"guarana-350.png" },
+      { id:"fanta", cat:"Bebidas", name:"Fanta Laranja (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"fanta-350.png" },
+      { id:"sprite", cat:"Bebidas", name:"Sprite (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"sprite-350.jpg" },
+
+      { id:"skol", cat:"Bebidas", name:"Skol (lata 350ml)", desc:"Cerveja gelada.", price:6.00, img:"skol-350.png" },
+      { id:"brahma269", cat:"Bebidas", name:"Brahma (lata 269ml)", desc:"Cerveja gelada.", price:5.00, img:"brahma-269.jpg" },
+      { id:"brahma473", cat:"Bebidas", name:"Brahma (lata 473ml)", desc:"Cerveja gelada.", price:8.00, img:"brahma-473.png" },
+      { id:"heineken", cat:"Bebidas", name:"Heineken (Long Neck)", desc:"Cerveja premium gelada.", price:10.00, img:"heineken-long.png" },
+    ];
+
+    const state = {
+      cat: "Tudo",
+      q: "",
+      cart: loadCart(),
+      open: true
+    };
+
+    const tabsEl = document.getElementById("tabs");
+    const gridEl = document.getElementById("menuGrid");
+    const searchInput = document.getElementById("searchInput");
+    const cartCountEl = document.getElementById("cartCount");
+    const drawer = document.getElementById("drawer");
+    const backdrop = document.getElementById("backdrop");
+    const cartItemsEl = document.getElementById("cartItems");
+    const subtotalText = document.getElementById("subtotalText");
+    const feeText = document.getElementById("feeText");
+    const totalText = document.getElementById("totalText");
+    const notesEl = document.getElementById("notes");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    const statusPill = document.getElementById("statusPill");
+    const statusText = document.getElementById("statusText");
+    const closedBanner = document.getElementById("closedBanner");
+    document.getElementById("feeTop").textContent = money(RESTAURANT.deliveryFee);
+
+    function money(v){
+      return v.toLocaleString("pt-BR",{style:"currency",currency:RESTAURANT.currency});
+    }
+
+    function isOpenNow(){
+      const now = new Date();
+      const day = now.getDay();       // 0 dom ... 6 sab
+      const hour = now.getHours();
+      const s = RESTAURANT.schedule;
+      return s.openDays.includes(day) && hour >= s.openHour && hour < s.closeHour;
+    }
+
+    function updateOpen(){
+      state.open = isOpenNow();
+      if(state.open){
+        statusPill.classList.add("open");
+        statusText.textContent = "Aberto agora • peça no WhatsApp";
+        closedBanner.style.display = "none";
+        checkoutBtn.disabled = false;
+        checkoutBtn.style.opacity = "1";
+      }else{
+        statusPill.classList.remove("open");
+        statusText.textContent = "Fechado agora • ver cardápio";
+        closedBanner.style.display = "block";
+        checkoutBtn.disabled = true;
+        checkoutBtn.style.opacity = ".55";
+      }
+    }
+
+    function saveCart(){
+      localStorage.setItem("tia_mada_cart", JSON.stringify(state.cart));
+    }
+    function loadCart(){
+      try{ return JSON.parse(localStorage.getItem("tia_mada_cart")) || {}; }
+      catch(e){ return {}; }
+    }
+    function cartCount(){
+      return Object.values(state.cart).reduce((a,b)=>a+b,0);
+    }
+    function subtotal(){
+      let sum=0;
+      for(const it of MENU){
+        const q = state.cart[it.id] || 0;
+        sum += it.price * q;
+      }
+      return sum;
+    }
+
+    function add(id){
+      state.cart[id] = (state.cart[id]||0)+1;
+      saveCart(); renderBadge();
+    }
+    function sub(id){
+      state.cart[id] = (state.cart[id]||0)-1;
+      if(state.cart[id] <= 0) delete state.cart[id];
+      saveCart(); renderBadge();
+    }
+    function del(id){
+      delete state.cart[id];
+      saveCart(); renderCart();
+    }
+
+    function categories(){
+      const set = new Set(MENU.map(i=>i.cat));
+      return ["Tudo", ...Array.from(set)];
+    }
+
+    function filtered(){
+      const q = state.q.trim().toLowerCase();
+      return MENU.filter(i=>{
+        const byCat = state.cat==="Tudo" || i.cat===state.cat;
+        const byQ = !q || (i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
+        return byCat && byQ;
+      });
+    }
+
+    function renderTabs(){
+      tabsEl.innerHTML="";
+      for(const c of categories()){
+        const el=document.createElement("div");
+        el.className="chip"+(c===state.cat?" active":"");
+        el.textContent=c;
+        el.onclick=()=>{state.cat=c;renderTabs();renderMenu();};
+        tabsEl.appendChild(el);
+      }
+    }
+
+    function renderMenu(){
+      gridEl.innerHTML="";
+      for(const it of filtered()){
+        const card=document.createElement("article");
+        card.className="item";
+
+        const thumb=document.createElement("div");
+        thumb.className="thumb";
+        thumb.innerHTML=`<img src="${it.img}" alt="${it.name}" loading="lazy">`;
+        if(it.tag){
+          const b=document.createElement("div");
+          b.className="badge";
+          b.textContent=it.tag;
+          thumb.appendChild(b);
+        }
+
+        const content=document.createElement("div");
+        content.className="content";
+        content.innerHTML=`
+          <div class="name">${it.name}</div>
+          <div class="desc">${it.desc}</div>
+          <div class="row">
+            <div class="price">${money(it.price)}</div>
+            <div class="qty">
+              <button class="iconbtn" aria-label="Diminuir">−</button>
+              <button class="iconbtn" aria-label="Adicionar">+</button>
+            </div>
+          </div>
+        `;
+        const [m,p]=content.querySelectorAll(".iconbtn");
+        m.onclick=()=>{sub(it.id);};
+        p.onclick=()=>{add(it.id);};
+
+        card.appendChild(thumb);
+        card.appendChild(content);
+        gridEl.appendChild(card);
+      }
+    }
+
+    function openDrawer(){
+      drawer.classList.add("open");
+      backdrop.classList.add("open");
+      renderCart();
+    }
+    function closeDrawer(){
+      drawer.classList.remove("open");
+      backdrop.classList.remove("open");
+    }
+
+    function renderBadge(){
+      cartCountEl.textContent = cartCount();
+    }
+
+    function renderCart(){
+      cartItemsEl.innerHTML="";
+      const entries = Object.entries(state.cart);
+
+      if(entries.length===0){
+        cartItemsEl.innerHTML = `
+          <div class="notice subnote">
+            Seu carrinho está vazio. Adicione itens no cardápio 😉
+          </div>
+        `;
+      }else{
+        for(const [id,qty] of entries){
+          const it = MENU.find(x=>x.id===id);
+          if(!it) continue;
+
+          const row=document.createElement("div");
+          row.className="lineitem";
+          row.innerHTML=`
+            <img src="${it.img}" alt="${it.name}">
+            <div>
+              <div class="li-title">${it.name}</div>
+              <div class="li-sub">${qty} × ${money(it.price)} = <b style="color:var(--text)">${money(it.price*qty)}</b></div>
+            </div>
+            <div class="li-actions">
+              <button class="iconbtn small" title="Diminuir">−</button>
+              <button class="iconbtn small" title="Adicionar">+</button>
+              <button class="iconbtn small trash" title="Remover">🗑</button>
+            </div>
+          `;
+          const [m,p,t]=row.querySelectorAll("button");
+          m.onclick=()=>{sub(id);renderCart();};
+          p.onclick=()=>{add(id);renderCart();};
+          t.onclick=()=>{del(id);};
+
+          cartItemsEl.appendChild(row);
+        }
+      }
+
+      const subT = subtotal();
+      const fee = entries.length ? RESTAURANT.deliveryFee : 0;
+      const total = subT + fee;
+
+      subtotalText.textContent = money(subT);
+      feeText.textContent = money(fee);
+      totalText.textContent = money(total);
+      renderBadge();
+    }
+
+    function buildWhatsApp(){
+      const entries = Object.entries(state.cart);
+      const subT = subtotal();
+      const fee = entries.length ? RESTAURANT.deliveryFee : 0;
+      const total = subT + fee;
+
+      let lines=[];
+      lines.push(`Olá! Quero fazer um pedido no *${RESTAURANT.name}* ✅`);
+      lines.push("");
+      lines.push("*Itens:*");
+      for(const [id,qty] of entries){
+        const it = MENU.find(x=>x.id===id);
+        if(!it) continue;
+        lines.push(`• ${qty}x ${it.name} — ${money(it.price*qty)}`);
+      }
+      lines.push("");
+      lines.push(`Subtotal: *${money(subT)}*`);
+      lines.push(`Taxa de entrega: *${money(fee)}*`);
+      lines.push(`Total: *${money(total)}*`);
+      lines.push("");
+      lines.push("*Entrega:*");
+      lines.push("Endereço para entrega: ______________________");
+      lines.push("Referência: ________________________________");
+      lines.push("");
+      lines.push("*Pagamento:* Pix / Crédito / Débito");
+      lines.push("Se precisar de troco, informe o valor: _______");
+
+      const obs = notesEl.value.trim();
+      if(obs){
+        lines.push("");
+        lines.push("*Observações:*");
+        lines.push(obs);
+      }
+
+      lines.push("");
+      lines.push(`📍 ${RESTAURANT.address}`);
+      return lines.join("\n");
+    }
+
+    
+    // ===== Checkout Modal (profissional) =====
+    const modal = document.getElementById("checkoutModal");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const closeModalBtn = document.getElementById("closeModal");
+    const checkoutForm = document.getElementById("checkoutForm");
+    const backToCartBtn = document.getElementById("backToCart");
+
+    const cName = document.getElementById("cName");
+    const cPhone = document.getElementById("cPhone");
+    const cMode = document.getElementById("cMode");
+    const cPay = document.getElementById("cPay");
+    const addrRow = document.getElementById("addrRow");
+    const cAddress = document.getElementById("cAddress");
+    const cComp = document.getElementById("cComp");
+    const cRef = document.getElementById("cRef");
+    const cNeedChange = document.getElementById("cNeedChange");
+    const cChangeFor = document.getElementById("cChangeFor");
+    const cObs = document.getElementById("cObs");
+
+    function openModal(){
+      modal.classList.add("open");
+      modalBackdrop.classList.add("open");
+      modalBackdrop.setAttribute("aria-hidden","false");
+      // leva as observações do carrinho para o checkout
+      cObs.value = (notesEl.value || "").trim();
+      setTimeout(()=>cName.focus(), 50);
+    }
+    function closeModal(){
+      modal.classList.remove("open");
+      modalBackdrop.classList.remove("open");
+      modalBackdrop.setAttribute("aria-hidden","true");
+    }
+
+    function updateModeUI(){
+      const isDelivery = cMode.value === "Entrega";
+      addrRow.style.display = isDelivery ? "grid" : "none";
+      cAddress.required = isDelivery;
+      if(!isDelivery){
+        cAddress.value = "";
+        cComp.value = "";
+        cRef.value = "";
+      }
+    }
+    function updateChangeUI(){
+      const isCash = cPay.value === "Dinheiro";
+      const need = cNeedChange.value === "Sim";
+      if(isCash && need){
+        cChangeFor.disabled = false;
+        cChangeFor.required = true;
+      }else{
+        cChangeFor.disabled = true;
+        cChangeFor.required = false;
+        cChangeFor.value = "";
+      }
+      if(!isCash){
+        cNeedChange.value = "Não";
+      }
+      document.getElementById("changeRow").style.display = isCash ? "grid" : "none";
+    }
+
+    function validateCheckout(){
+      if(!checkoutForm.reportValidity()) return false;
+
+      if(cMode.value==="Entrega" && !cAddress.value.trim()){
+        alert("Por favor, informe o endereço completo para entrega.");
+        cAddress.focus();
+        return false;
+      }
+      if(cPay.value==="Dinheiro" && cNeedChange.value==="Sim"){
+        const v = parseFloat(cChangeFor.value || "0");
+        if(!(v>0)){
+          alert("Informe o valor do troco (ex: 100).");
+          cChangeFor.focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function buildWhatsAppWithCustomer(){
+      const entries = Object.entries(state.cart);
+      const subT = subtotal();
+      const fee = entries.length ? RESTAURANT.deliveryFee : 0;
+      const total = subT + fee;
+
+      const name = cName.value.trim();
+      const phone = cPhone.value.trim();
+      const mode = cMode.value;
+      const pay = cPay.value;
+
+      const address = cAddress.value.trim();
+      const comp = cComp.value.trim();
+      const ref = cRef.value.trim();
+
+      const needChange = (pay === "Dinheiro") ? cNeedChange.value : "Não";
+      const changeFor = cChangeFor.value ? Number(cChangeFor.value).toFixed(2).replace(".", ",") : "";
+
+      const obs = cObs.value.trim();
+
+      let lines=[];
+      lines.push(`Olá! Quero fazer um pedido no *${RESTAURANT.name}* ✅`);
+      lines.push("");
+      lines.push("*Cliente:*");
+      lines.push(`Nome: ${name}`);
+      if(phone) lines.push(`Telefone: ${phone}`);
+      lines.push(`Modalidade: ${mode}`);
+      lines.push(`Pagamento: ${pay}`);
+      if(pay === "Dinheiro"){
+        lines.push(`Troco: ${needChange}${needChange==="Sim" && changeFor ? ` (para R$ ${changeFor})` : ""}`);
+      }
+
+      if(mode === "Entrega"){
+        lines.push("");
+        lines.push("*Endereço de entrega:*");
+        lines.push(address);
+        if(comp) lines.push(`Complemento: ${comp}`);
+        if(ref) lines.push(`Referência: ${ref}`);
+      }
+
+      lines.push("");
+      lines.push("*Itens:*");
+      for(const [id,qty] of entries){
+        const it = MENU.find(x=>x.id===id);
+        if(!it) continue;
+        lines.push(`• ${qty}x ${it.name} — ${money(it.price*qty)}`);
+      }
+
+      lines.push("");
+      lines.push(`Subtotal: *${money(subT)}*`);
+      lines.push(`Taxa de entrega: *${money(fee)}*`);
+      lines.push(`Total: *${money(total)}*`);
+
+      if(obs){
+        lines.push("");
+        lines.push("*Observações:*");
+        lines.push(obs);
+      }
+
+      lines.push("");
+      lines.push(`📍 ${RESTAURANT.address}`);
+      return lines.join("\n");
+    }
+
+
+    // Events
+    document.getElementById("openCart").onclick=openDrawer;
+    document.getElementById("closeCart").onclick=closeDrawer;
+    backdrop.onclick=closeDrawer;
+
+    document.getElementById("clearBtn").onclick=()=>{
+      state.cart={}; saveCart(); renderCart();
+    };
+
+    document.getElementById("btnCall").onclick=()=>{
+      const url = `https://wa.me/${RESTAURANT.whatsapp}?text=${encodeURIComponent("Olá! Quero fazer um pedido 🙂")}`;
+      window.open(url,"_blank");
+    };
+
+    document.getElementById("btnScrollMenu").onclick=()=>{
+      window.scrollTo({top: tabsEl.offsetTop-80, behavior:"smooth"});
+    };
+
+    document.getElementById("btnInfo").onclick=()=>{
+      alert(`${RESTAURANT.name}\n\nHorário: Qua a Sáb — 19:00 às 23:00\nWhatsApp: ${RESTAURANT.whatsappDisplay}\nEndereço: ${RESTAURANT.address}\n\nPagamento: Pix / Crédito / Débito\nTaxa de entrega: ${money(RESTAURANT.deliveryFee)}`);
+    };
+
+    if(searchInput){
+      searchInput.addEventListener("input",(e)=>{
+        state.q = e.target.value || "";
+        renderMenu();
+      });
+    }
+
+    checkoutBtn.onclick=()=>{
+      const entries = Object.entries(state.cart);
+      if(entries.length===0){ alert("Seu carrinho está vazio 🙂"); return; }
+      if(!state.open){ alert("Estamos fechados agora. Finalize dentro do horário (Qua a Sáb — 19h às 23h)."); return; }
+      openModal();
+    };
+
+    // Modal wiring
+    cMode.addEventListener("change", updateModeUI);
+    cPay.addEventListener("change", updateChangeUI);
+    cNeedChange.addEventListener("change", updateChangeUI);
+    updateModeUI();
+    updateChangeUI();
+
+    checkoutForm.addEventListener("submit",(e)=>{
+      e.preventDefault();
+      const entries = Object.entries(state.cart);
+      if(entries.length===0){ alert("Seu carrinho está vazio 🙂"); closeModal(); return; }
+      if(!validateCheckout()) return;
+
+      // sincroniza observações para o carrinho
+      notesEl.value = cObs.value.trim();
+
+      const msg = buildWhatsAppWithCustomer();
+      const url = `https://wa.me/${RESTAURANT.whatsapp}?text=${encodeURIComponent(msg)}`;
+      closeModal();
+      window.open(url,"_blank");
+    });
+
+    function closeModalByClick(){ closeModal(); }
+    closeModalBtn.onclick = closeModalByClick;
+    modalBackdrop.onclick = closeModalByClick;
+    backToCartBtn.onclick = ()=>{ closeModal(); openDrawer(); };
+
+    document.addEventListener("keydown",(e)=>{
+      if(e.key==="Escape" && modal.classList.contains("open")) closeModal();
+    });
+// Init
+    renderTabs();
+    renderMenu();
+    renderBadge();
+    updateOpen();
+    setInterval(updateOpen, 60*1000);
+  </script>
+</body>
+</html>
