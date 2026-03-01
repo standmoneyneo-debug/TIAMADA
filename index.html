@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=5" />
   <title>Delícias da Tia Madá — Delivery</title>
   <meta name="description" content="Delícias da Tia Madá — Delivery. Monte seu pedido no carrinho e finalize pelo WhatsApp." />
   <meta name="theme-color" content="#0b0f14" />
@@ -22,7 +22,7 @@
       --shadow: 0 16px 40px rgba(2,6,23,.10);
       --r:18px;
     }
-    *{box-sizing:border-box}
+    *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
     html,body{height:100%}
     body{
       margin:0;
@@ -66,7 +66,7 @@
       background: rgba(15,23,42,.04);
       color:var(--text);
       padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:700;font-size:13px;
-      display:inline-flex;gap:8px;align-items:center;
+      display:inline-flex;gap:8px;align-items:center;transition: all 0.2s;
     }
     .btn.primary{
       background: linear-gradient(135deg, rgba(255,176,32,.95), rgba(255,77,90,.95));
@@ -123,7 +123,9 @@
     .chip{
       padding:10px 12px;border-radius:999px;border:1px solid var(--border);
       background: rgba(15,23,42,.03);font-size:13px;cursor:pointer;user-select:none;
+      transition: all 0.2s;
     }
+    .chip:active{background: rgba(255,176,32,.3);}
     .chip.active{background: rgba(255,176,32,.16);border-color: rgba(255,176,32,.35)}
     .grid{display:grid;grid-template-columns: repeat(3, minmax(0, 1fr));gap:14px;padding:14px 0 112px}
     .item{
@@ -152,14 +154,17 @@
       width:36px;height:36px;border-radius:12px;border:1px solid var(--border);
       background: rgba(2,6,23,.04);color:var(--text);
       cursor:pointer;font-weight:900;display:grid;place-items:center;
+      transition: all 0.2s;
     }
+    .iconbtn:active{background: rgba(255,176,32,.2);}
 
     .cart-fab{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;gap:10px;align-items:center}
     .fab{
       border:none;background: linear-gradient(135deg, rgba(255,176,32,.95), rgba(255,77,90,.95));
       color:#111;padding:14px 16px;border-radius:16px;cursor:pointer;box-shadow: var(--shadow);
-      font-weight:950;display:flex;gap:10px;align-items:center;
+      font-weight:950;display:flex;gap:10px;align-items:center;transition: all 0.2s;
     }
+    .fab:active{transform: scale(0.97);}
     .count{background: rgba(0,0,0,.18);padding:6px 10px;border-radius:999px;font-weight:950}
     .backdrop{position:fixed;inset:0;background: rgba(0,0,0,.55);display:none;z-index:70}
     .drawer{
@@ -209,6 +214,7 @@
     @media (max-width: 560px){
       .grid{grid-template-columns:1fr}
       .topbar-inner{gap:10px}
+      .btn span{display:none}
     }
   
     /* Modal checkout */
@@ -270,7 +276,6 @@
       .form-actions .btn{flex:auto}
     }
 
-  
     /* Clareza / contraste (UI) */
     .brand .title strong{font-size:15px}
     .brand .title span{font-size:12.5px}
@@ -298,6 +303,13 @@
     .modal-backdrop{background: rgba(2,6,23,.45)}
     .modal-head{background: linear-gradient(180deg, rgba(248,250,252,.98), rgba(241,245,249,.92))}
 
+    /* Melhorias para mobile */
+    button{cursor: pointer;}
+    @media (max-width: 480px){
+      .fab span.count{margin-left: 0;}
+      .btn span{display: none;}
+      .pill span:last-child{font-size: 11px;}
+    }
   </style>
 </head>
 
@@ -305,23 +317,23 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
-        <img class="logo" src="logo.jpg" alt="Logo Delícias da Tia Madá" />
+        <img class="logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23f59e0b'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23000' font-family='Arial'%3E🍽️%3C/text%3E%3C/svg%3E" alt="Logo Delícias da Tia Madá" />
         <div class="title">
           <strong>Delícias da Tia Madá</strong>
-          <span>Delivery e atendimento presencial</span>
+          <span>Delivery e atendimento</span>
         </div>
       </div>
 
       <div class="search" title="Buscar no cardápio">
-        🔎 <input id="searchInput" type="search" placeholder="Buscar… (ex: batata, caldo, cerveja)" />
+        🔎 <input id="searchInput" type="search" placeholder="Buscar… (ex: batata, caldo)" />
       </div>
 
       <div class="actions">
         <div id="statusPill" class="pill">
           <span class="dot"></span>
-          <span id="statusText">Verificando horário…</span>
+          <span id="statusText">Verificando…</span>
         </div>
-        <button class="btn" id="btnInfo" type="button">📍 Info</button>
+        <button class="btn" id="btnInfo" type="button">📍 <span>Info</span></button>
       </div>
     </div>
   </header>
@@ -346,18 +358,18 @@
           </div>
           <div class="mini">
             <b>Endereço</b>
-            <span>Rua Roraima, 232 — N. Sra. de Fátima</span>
+            <span>Rua Roraima, 232</span>
           </div>
         </div>
 
         <div id="closedBanner" class="closed">
-          ⏰ Agora estamos <b>fechados</b>. Você pode ver o cardápio, mas o botão de finalizar pedido fica bloqueado fora do horário.
+          ⏰ Agora estamos <b>fechados</b>. Você pode ver o cardápio, mas o botão de finalizar fica bloqueado.
         </div>
       </div>
 
       <aside class="info">
         <div class="notice">
-          <b>Como pedir:</b> adicione itens → confira o carrinho → escreva observações → <b>Finalizar no WhatsApp</b>.
+          <b>Como pedir:</b> adicione itens → confira o carrinho → escreva observações → <b>Finalizar</b>.
         </div>
         <div class="line"><span>Taxa de entrega</span><b id="feeTop">R$ 2,00</b></div>
         <div class="line"><span>Pagamento</span><b>Pix • Crédito • Débito</b></div>
@@ -365,7 +377,7 @@
         <button class="btn primary" id="btnScrollMenu" type="button">🍽️ Ver cardápio</button>
         <button class="btn" id="btnCall" type="button">📲 Chamar no WhatsApp</button>
         <div class="notice subnote">
-          <b>Endereço:</b> Rua Roraima, nº 232 — Nossa Senhora de Fátima — Itacarambi/MG
+          <b>Endereço:</b> Rua Roraima, 232 — N. Sra. de Fátima — Itacarambi/MG
         </div>
       </aside>
     </section>
@@ -376,7 +388,7 @@
 
   <div class="cart-fab">
     <button class="fab" id="openCart" type="button" aria-label="Abrir carrinho">
-      🛒 Carrinho <span class="count" id="cartCount">0</span>
+      🛒 <span>Carrinho</span> <span class="count" id="cartCount">0</span>
     </button>
   </div>
 
@@ -396,17 +408,16 @@
         <div class="trow"><span>Total</span><b id="totalText">R$ 0,00</b></div>
       </div>
 
-      <textarea id="notes" placeholder="Observações (ex: sem cebola, bem passado, trocar bebida, etc.)"></textarea>
+      <textarea id="notes" placeholder="Observações (ex: sem cebola, bem passado)"></textarea>
 
       <button class="btn primary" id="checkoutBtn" type="button">✅ Finalizar no WhatsApp</button>
       <button class="btn" id="clearBtn" type="button">🧹 Limpar carrinho</button>
 
       <div class="notice subnote">
-        <b>Importante:</b> informe no WhatsApp o <b>endereço para entrega</b> e a <b>forma de pagamento</b>.
+        <b>Importante:</b> informe no WhatsApp o <b>endereço</b> e a <b>forma de pagamento</b>.
       </div>
     </div>
   </aside>
-
 
   <!-- Checkout Modal -->
   <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"></div>
@@ -415,7 +426,7 @@
       <div class="modal-head">
         <div>
           <div class="modal-title" id="checkoutTitle">Finalizar pedido</div>
-          <div class="modal-sub">Preencha os dados para enviar o pedido no WhatsApp.</div>
+          <div class="modal-sub">Preencha para enviar pelo WhatsApp</div>
         </div>
         <button class="btn" id="closeModal" type="button">✖</button>
       </div>
@@ -424,12 +435,12 @@
         <div class="grid2">
           <label class="field">
             <span>Nome *</span>
-            <input id="cName" type="text" autocomplete="name" required placeholder="Ex: Maria Silva" />
+            <input id="cName" type="text" required placeholder="Seu nome" />
           </label>
 
           <label class="field">
-            <span>Telefone (opcional)</span>
-            <input id="cPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Ex: (38) 9xxxx-xxxx" />
+            <span>Telefone</span>
+            <input id="cPhone" type="tel" placeholder="(38) 9xxxx-xxxx" />
           </label>
         </div>
 
@@ -456,17 +467,17 @@
         <div class="grid2" id="addrRow">
           <label class="field" style="grid-column: 1 / -1;">
             <span>Endereço completo *</span>
-            <input id="cAddress" type="text" autocomplete="street-address" placeholder="Rua, nº, bairro" />
+            <input id="cAddress" type="text" placeholder="Rua, nº, bairro" />
           </label>
 
           <label class="field">
-            <span>Complemento (opcional)</span>
-            <input id="cComp" type="text" placeholder="Apto, casa, ponto de referência" />
+            <span>Complemento</span>
+            <input id="cComp" type="text" placeholder="Apto, casa" />
           </label>
 
           <label class="field">
-            <span>Referência (opcional)</span>
-            <input id="cRef" type="text" placeholder="Ex: perto da igreja" />
+            <span>Referência</span>
+            <input id="cRef" type="text" placeholder="Perto da igreja" />
           </label>
         </div>
 
@@ -481,27 +492,26 @@
 
           <label class="field">
             <span>Troco para (R$)</span>
-            <input id="cChangeFor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex: 100" disabled />
+            <input id="cChangeFor" type="number" min="0" step="0.01" placeholder="Ex: 100" disabled />
           </label>
         </div>
 
         <label class="field">
-          <span>Observações (opcional)</span>
+          <span>Observações</span>
           <textarea id="cObs" placeholder="Ex: sem cebola, bem passado..."></textarea>
         </label>
 
         <div class="form-actions">
           <button class="btn" type="button" id="backToCart">← Voltar</button>
-          <button class="btn primary" type="submit" id="sendWhats">✅ Enviar no WhatsApp</button>
+          <button class="btn primary" type="submit" id="sendWhats">✅ Enviar</button>
         </div>
 
         <div class="form-hint">
-          * Campos obrigatórios. Seus dados ficam apenas no seu aparelho (não enviamos para servidor).
+          * Campos obrigatórios. Seus dados ficam apenas no seu aparelho.
         </div>
       </form>
     </div>
   </section>
-
 
   <script>
     const RESTAURANT = {
@@ -514,49 +524,33 @@
       currency: "BRL"
     };
 
-    // Cardápio (valores dos cartazes + bebidas com preço justo)
+    // Cardápio completo
     const MENU = [
-      // PETISCOS / PORÇÕES
-      { id:"peixe_p", cat:"Petiscos", name:"Peixe frito (P)", desc:"Porção pequena.", price:20.00, img:"peixe-frito.jpg", tag:"Terça dos petiscos" },
-      { id:"peixe_g", cat:"Petiscos", name:"Peixe frito (G)", desc:"Porção grande.", price:40.00, img:"peixe-frito.jpg" },
-
-      { id:"carne_fritas_p", cat:"Petiscos", name:"Carne c/ fritas (P)", desc:"Porção pequena.", price:38.00, img:"1426030823ggiicc8kab.webp", tag:"Mais vendido" },
-      { id:"carne_fritas_g", cat:"Petiscos", name:"Carne c/ fritas (G)", desc:"Porção grande.", price:55.00, img:"1426030823ggiicc8kab.webp" },
-
-      { id:"iscas_p", cat:"Petiscos", name:"Iscas de frango (P)", desc:"Porção pequena.", price:20.00, img:"frango-frito.jpg" },
-      { id:"iscas_g", cat:"Petiscos", name:"Iscas de frango (G)", desc:"Porção grande.", price:30.00, img:"frango-frito.jpg" },
-
-      { id:"batata_p", cat:"Petiscos", name:"Batata c/ cheddar e bacon (P)", desc:"Porção pequena.", price:20.00, img:"batata-cheddar-bacon.jpg" },
-      { id:"batata_g", cat:"Petiscos", name:"Batata c/ cheddar e bacon (G)", desc:"Porção grande.", price:30.00, img:"batata-cheddar-bacon.jpg", tag:"Top" },
-
-      { id:"farofa_p", cat:"Petiscos", name:"Farofa de carne (P)", desc:"Porção pequena.", price:20.00, img:"Farofa-de-carne-assada.jpg" },
-      { id:"farofa_g", cat:"Petiscos", name:"Farofa de carne (G)", desc:"Porção grande.", price:30.00, img:"Farofa-de-carne-assada.jpg" },
-
-      // CALDOS (R$12 no cartaz)
-      { id:"caldo_kenga", cat:"Caldos", name:"Caldo de Kenga c/ queijo", desc:"Quentinho e bem temperado.", price:12.00, img:"caldo kenga.png", tag:"Quentinho" },
-      { id:"caldo_feijao", cat:"Caldos", name:"Caldo de feijão c/ torresmo", desc:"Cremoso com torresmo.", price:12.00, img:"CALDOdefeijão.webp" },
-      { id:"caldo_capim", cat:"Caldos", name:"Caldo Capim Canela", desc:"Caldinho caseiro.", price:12.00, img:"capincanela.jpg" },
-      { id:"caldo_dobradinha", cat:"Caldos", name:"Dobradinha c/ feijão branco", desc:"Caldinho reforçado.", price:12.00, img:"dobradinha.webp" },
-
-      // PRATOS
-      { id:"alm_p", cat:"Pratos", name:"Almôndegas ao molho (P)", desc:"Porção pequena.", price:20.00, img:"macarrãobolonhesa.jpeg" },
-      { id:"alm_g", cat:"Pratos", name:"Almôndegas ao molho (G)", desc:"Porção grande.", price:30.00, img:"macarrãobolonhesa.jpeg" },
-
-      { id:"carne_mandioca", cat:"Pratos", name:"Carne serenada c/ mandioca cozida", desc:"Porção reforçada.", price:60.00, img:"iscas-frango.jpg", tag:"Especial" },
-
-      // MARMITAS (cartaz mostra R$20,00)
-      { id:"marmita_feijoada", cat:"Marmitas", name:"Marmita de Feijoada", desc:"Arroz, feijoada, couve, farofa, vinagrete e laranja.", price:20.00, img:"feijoada.jpg", tag:"Do dia" },
-
-      // BEBIDAS (preço justo)
-      { id:"coca", cat:"Bebidas", name:"Coca-Cola (lata 350ml)", desc:"Bem gelada.", price:7.00, img:"coca-350.png" },
-      { id:"guarana", cat:"Bebidas", name:"Guaraná Antarctica (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"guarana-350.png" },
-      { id:"fanta", cat:"Bebidas", name:"Fanta Laranja (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"fanta-350.png" },
-      { id:"sprite", cat:"Bebidas", name:"Sprite (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"sprite-350.jpg" },
-
-      { id:"skol", cat:"Bebidas", name:"Skol (lata 350ml)", desc:"Cerveja gelada.", price:6.00, img:"skol-350.png" },
-      { id:"brahma269", cat:"Bebidas", name:"Brahma (lata 269ml)", desc:"Cerveja gelada.", price:5.00, img:"brahma-269.jpg" },
-      { id:"brahma473", cat:"Bebidas", name:"Brahma (lata 473ml)", desc:"Cerveja gelada.", price:8.00, img:"brahma-473.png" },
-      { id:"heineken", cat:"Bebidas", name:"Heineken (Long Neck)", desc:"Cerveja premium gelada.", price:10.00, img:"heineken-long.png" },
+      { id:"peixe_p", cat:"Petiscos", name:"Peixe frito (P)", desc:"Porção pequena.", price:20.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🐟%3C/text%3E%3C/svg%3E", tag:"Terça dos petiscos" },
+      { id:"peixe_g", cat:"Petiscos", name:"Peixe frito (G)", desc:"Porção grande.", price:40.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🐟%3C/text%3E%3C/svg%3E" },
+      { id:"carne_fritas_p", cat:"Petiscos", name:"Carne c/ fritas (P)", desc:"Porção pequena.", price:38.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥩%3C/text%3E%3C/svg%3E", tag:"Mais vendido" },
+      { id:"carne_fritas_g", cat:"Petiscos", name:"Carne c/ fritas (G)", desc:"Porção grande.", price:55.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥩%3C/text%3E%3C/svg%3E" },
+      { id:"iscas_p", cat:"Petiscos", name:"Iscas de frango (P)", desc:"Porção pequena.", price:20.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍗%3C/text%3E%3C/svg%3E" },
+      { id:"iscas_g", cat:"Petiscos", name:"Iscas de frango (G)", desc:"Porção grande.", price:30.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍗%3C/text%3E%3C/svg%3E" },
+      { id:"batata_p", cat:"Petiscos", name:"Batata c/ cheddar e bacon (P)", desc:"Porção pequena.", price:20.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍟%3C/text%3E%3C/svg%3E" },
+      { id:"batata_g", cat:"Petiscos", name:"Batata c/ cheddar e bacon (G)", desc:"Porção grande.", price:30.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍟%3C/text%3E%3C/svg%3E", tag:"Top" },
+      { id:"farofa_p", cat:"Petiscos", name:"Farofa de carne (P)", desc:"Porção pequena.", price:20.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍚%3C/text%3E%3C/svg%3E" },
+      { id:"farofa_g", cat:"Petiscos", name:"Farofa de carne (G)", desc:"Porção grande.", price:30.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍚%3C/text%3E%3C/svg%3E" },
+      { id:"caldo_kenga", cat:"Caldos", name:"Caldo de Kenga c/ queijo", desc:"Quentinho e bem temperado.", price:12.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥣%3C/text%3E%3C/svg%3E", tag:"Quentinho" },
+      { id:"caldo_feijao", cat:"Caldos", name:"Caldo de feijão c/ torresmo", desc:"Cremoso com torresmo.", price:12.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥣%3C/text%3E%3C/svg%3E" },
+      { id:"caldo_capim", cat:"Caldos", name:"Caldo Capim Canela", desc:"Caldinho caseiro.", price:12.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥣%3C/text%3E%3C/svg%3E" },
+      { id:"caldo_dobradinha", cat:"Caldos", name:"Dobradinha c/ feijão branco", desc:"Caldinho reforçado.", price:12.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥣%3C/text%3E%3C/svg%3E" },
+      { id:"alm_p", cat:"Pratos", name:"Almôndegas ao molho (P)", desc:"Porção pequena.", price:20.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍝%3C/text%3E%3C/svg%3E" },
+      { id:"alm_g", cat:"Pratos", name:"Almôndegas ao molho (G)", desc:"Porção grande.", price:30.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍝%3C/text%3E%3C/svg%3E" },
+      { id:"carne_mandioca", cat:"Pratos", name:"Carne serenada c/ mandioca", desc:"Porção reforçada.", price:60.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍖%3C/text%3E%3C/svg%3E", tag:"Especial" },
+      { id:"marmita_feijoada", cat:"Marmitas", name:"Marmita de Feijoada", desc:"Arroz, feijoada, couve, farofa, vinagrete.", price:20.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍱%3C/text%3E%3C/svg%3E", tag:"Do dia" },
+      { id:"coca", cat:"Bebidas", name:"Coca-Cola (lata 350ml)", desc:"Bem gelada.", price:7.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥤%3C/text%3E%3C/svg%3E" },
+      { id:"guarana", cat:"Bebidas", name:"Guaraná (lata 350ml)", desc:"Bem gelada.", price:6.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥤%3C/text%3E%3C/svg%3E" },
+      { id:"fanta", cat:"Bebidas", name:"Fanta Laranja (lata)", desc:"Bem gelada.", price:6.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🥤%3C/text%3E%3C/svg%3E" },
+      { id:"skol", cat:"Bebidas", name:"Skol (lata 350ml)", desc:"Cerveja gelada.", price:6.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍺%3C/text%3E%3C/svg%3E" },
+      { id:"brahma269", cat:"Bebidas", name:"Brahma (lata 269ml)", desc:"Cerveja gelada.", price:5.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍺%3C/text%3E%3C/svg%3E" },
+      { id:"brahma473", cat:"Bebidas", name:"Brahma (lata 473ml)", desc:"Cerveja gelada.", price:8.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍺%3C/text%3E%3C/svg%3E" },
+      { id:"heineken", cat:"Bebidas", name:"Heineken (Long Neck)", desc:"Premium gelada.", price:10.00, img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23333'/%3E%3Ctext x='10' y='55' fill='%23f59e0b' font-size='40'%3E🍺%3C/text%3E%3C/svg%3E" },
     ];
 
     const state = {
@@ -566,6 +560,7 @@
       open: true
     };
 
+    // Elementos DOM
     const tabsEl = document.getElementById("tabs");
     const gridEl = document.getElementById("menuGrid");
     const searchInput = document.getElementById("searchInput");
@@ -581,6 +576,7 @@
     const statusPill = document.getElementById("statusPill");
     const statusText = document.getElementById("statusText");
     const closedBanner = document.getElementById("closedBanner");
+    
     document.getElementById("feeTop").textContent = money(RESTAURANT.deliveryFee);
 
     function money(v){
@@ -589,7 +585,7 @@
 
     function isOpenNow(){
       const now = new Date();
-      const day = now.getDay();       // 0 dom ... 6 sab
+      const day = now.getDay();
       const hour = now.getHours();
       const s = RESTAURANT.schedule;
       return s.openDays.includes(day) && hour >= s.openHour && hour < s.closeHour;
@@ -599,13 +595,13 @@
       state.open = isOpenNow();
       if(state.open){
         statusPill.classList.add("open");
-        statusText.textContent = "Aberto agora • peça no WhatsApp";
+        statusText.textContent = "Aberto agora";
         closedBanner.style.display = "none";
         checkoutBtn.disabled = false;
         checkoutBtn.style.opacity = "1";
       }else{
         statusPill.classList.remove("open");
-        statusText.textContent = "Fechado agora • ver cardápio";
+        statusText.textContent = "Fechado agora";
         closedBanner.style.display = "block";
         checkoutBtn.disabled = true;
         checkoutBtn.style.opacity = ".55";
@@ -615,13 +611,16 @@
     function saveCart(){
       localStorage.setItem("tia_mada_cart", JSON.stringify(state.cart));
     }
+    
     function loadCart(){
       try{ return JSON.parse(localStorage.getItem("tia_mada_cart")) || {}; }
       catch(e){ return {}; }
     }
+    
     function cartCount(){
       return Object.values(state.cart).reduce((a,b)=>a+b,0);
     }
+    
     function subtotal(){
       let sum=0;
       for(const it of MENU){
@@ -633,16 +632,24 @@
 
     function add(id){
       state.cart[id] = (state.cart[id]||0)+1;
-      saveCart(); renderBadge();
+      saveCart(); 
+      renderBadge();
+      if(drawer.classList.contains("open")) renderCart();
     }
+    
     function sub(id){
       state.cart[id] = (state.cart[id]||0)-1;
       if(state.cart[id] <= 0) delete state.cart[id];
-      saveCart(); renderBadge();
+      saveCart(); 
+      renderBadge();
+      if(drawer.classList.contains("open")) renderCart();
     }
+    
     function del(id){
       delete state.cart[id];
-      saveCart(); renderCart();
+      saveCart(); 
+      renderBadge();
+      renderCart();
     }
 
     function categories(){
@@ -700,8 +707,8 @@
           </div>
         `;
         const [m,p]=content.querySelectorAll(".iconbtn");
-        m.onclick=()=>{sub(it.id);};
-        p.onclick=()=>{add(it.id);};
+        m.onclick=(e)=>{e.preventDefault(); sub(it.id); renderMenu();};
+        p.onclick=(e)=>{e.preventDefault(); add(it.id); renderMenu();};
 
         card.appendChild(thumb);
         card.appendChild(content);
@@ -714,6 +721,7 @@
       backdrop.classList.add("open");
       renderCart();
     }
+    
     function closeDrawer(){
       drawer.classList.remove("open");
       backdrop.classList.remove("open");
@@ -744,7 +752,7 @@
             <img src="${it.img}" alt="${it.name}">
             <div>
               <div class="li-title">${it.name}</div>
-              <div class="li-sub">${qty} × ${money(it.price)} = <b style="color:var(--text)">${money(it.price*qty)}</b></div>
+              <div class="li-sub">${qty} × ${money(it.price)} = <b>${money(it.price*qty)}</b></div>
             </div>
             <div class="li-actions">
               <button class="iconbtn small" title="Diminuir">−</button>
@@ -753,9 +761,9 @@
             </div>
           `;
           const [m,p,t]=row.querySelectorAll("button");
-          m.onclick=()=>{sub(id);renderCart();};
-          p.onclick=()=>{add(id);renderCart();};
-          t.onclick=()=>{del(id);};
+          m.onclick=()=>{sub(id); renderCart(); renderBadge();};
+          p.onclick=()=>{add(id); renderCart(); renderBadge();};
+          t.onclick=()=>{del(id); renderCart(); renderBadge();};
 
           cartItemsEl.appendChild(row);
         }
@@ -768,50 +776,9 @@
       subtotalText.textContent = money(subT);
       feeText.textContent = money(fee);
       totalText.textContent = money(total);
-      renderBadge();
     }
 
-    function buildWhatsApp(){
-      const entries = Object.entries(state.cart);
-      const subT = subtotal();
-      const fee = entries.length ? RESTAURANT.deliveryFee : 0;
-      const total = subT + fee;
-
-      let lines=[];
-      lines.push(`Olá! Quero fazer um pedido no *${RESTAURANT.name}* ✅`);
-      lines.push("");
-      lines.push("*Itens:*");
-      for(const [id,qty] of entries){
-        const it = MENU.find(x=>x.id===id);
-        if(!it) continue;
-        lines.push(`• ${qty}x ${it.name} — ${money(it.price*qty)}`);
-      }
-      lines.push("");
-      lines.push(`Subtotal: *${money(subT)}*`);
-      lines.push(`Taxa de entrega: *${money(fee)}*`);
-      lines.push(`Total: *${money(total)}*`);
-      lines.push("");
-      lines.push("*Entrega:*");
-      lines.push("Endereço para entrega: ______________________");
-      lines.push("Referência: ________________________________");
-      lines.push("");
-      lines.push("*Pagamento:* Pix / Crédito / Débito");
-      lines.push("Se precisar de troco, informe o valor: _______");
-
-      const obs = notesEl.value.trim();
-      if(obs){
-        lines.push("");
-        lines.push("*Observações:*");
-        lines.push(obs);
-      }
-
-      lines.push("");
-      lines.push(`📍 ${RESTAURANT.address}`);
-      return lines.join("\n");
-    }
-
-    
-    // ===== Checkout Modal (profissional) =====
+    // Modal elements
     const modal = document.getElementById("checkoutModal");
     const modalBackdrop = document.getElementById("modalBackdrop");
     const closeModalBtn = document.getElementById("closeModal");
@@ -834,10 +801,10 @@
       modal.classList.add("open");
       modalBackdrop.classList.add("open");
       modalBackdrop.setAttribute("aria-hidden","false");
-      // leva as observações do carrinho para o checkout
       cObs.value = (notesEl.value || "").trim();
-      setTimeout(()=>cName.focus(), 50);
+      setTimeout(()=>cName.focus(), 100);
     }
+    
     function closeModal(){
       modal.classList.remove("open");
       modalBackdrop.classList.remove("open");
@@ -854,6 +821,7 @@
         cRef.value = "";
       }
     }
+    
     function updateChangeUI(){
       const isCash = cPay.value === "Dinheiro";
       const need = cNeedChange.value === "Sim";
@@ -882,7 +850,7 @@
       if(cPay.value==="Dinheiro" && cNeedChange.value==="Sim"){
         const v = parseFloat(cChangeFor.value || "0");
         if(!(v>0)){
-          alert("Informe o valor do troco (ex: 100).");
+          alert("Informe o valor do troco.");
           cChangeFor.focus();
           return false;
         }
@@ -913,13 +881,12 @@
       let lines=[];
       lines.push(`Olá! Quero fazer um pedido no *${RESTAURANT.name}* ✅`);
       lines.push("");
-      lines.push("*Cliente:*");
-      lines.push(`Nome: ${name}`);
-      if(phone) lines.push(`Telefone: ${phone}`);
-      lines.push(`Modalidade: ${mode}`);
-      lines.push(`Pagamento: ${pay}`);
-      if(pay === "Dinheiro"){
-        lines.push(`Troco: ${needChange}${needChange==="Sim" && changeFor ? ` (para R$ ${changeFor})` : ""}`);
+      lines.push(`*Cliente:* ${name}`);
+      if(phone) lines.push(`*Telefone:* ${phone}`);
+      lines.push(`*Modalidade:* ${mode}`);
+      lines.push(`*Pagamento:* ${pay}`);
+      if(pay === "Dinheiro" && needChange === "Sim" && changeFor){
+        lines.push(`*Troco para:* R$ ${changeFor}`);
       }
 
       if(mode === "Entrega"){
@@ -939,9 +906,9 @@
       }
 
       lines.push("");
-      lines.push(`Subtotal: *${money(subT)}*`);
-      lines.push(`Taxa de entrega: *${money(fee)}*`);
-      lines.push(`Total: *${money(total)}*`);
+      lines.push(`*Subtotal:* ${money(subT)}`);
+      lines.push(`*Taxa de entrega:* ${money(fee)}`);
+      lines.push(`*Total:* ${money(total)}`);
 
       if(obs){
         lines.push("");
@@ -954,14 +921,18 @@
       return lines.join("\n");
     }
 
-
-    // Events
+    // Event listeners
     document.getElementById("openCart").onclick=openDrawer;
     document.getElementById("closeCart").onclick=closeDrawer;
     backdrop.onclick=closeDrawer;
 
     document.getElementById("clearBtn").onclick=()=>{
-      state.cart={}; saveCart(); renderCart();
+      if(confirm("Limpar todo o carrinho?")){
+        state.cart={}; 
+        saveCart(); 
+        renderCart();
+        renderBadge();
+      }
     };
 
     document.getElementById("btnCall").onclick=()=>{
@@ -974,7 +945,7 @@
     };
 
     document.getElementById("btnInfo").onclick=()=>{
-      alert(`${RESTAURANT.name}\n\nHorário: Qua a Sáb — 19:00 às 23:00\nWhatsApp: ${RESTAURANT.whatsappDisplay}\nEndereço: ${RESTAURANT.address}\n\nPagamento: Pix / Crédito / Débito\nTaxa de entrega: ${money(RESTAURANT.deliveryFee)}`);
+      alert(`${RESTAURANT.name}\n\nHorário: Qua a Sáb — 19:00 às 23:00\nWhatsApp: ${RESTAURANT.whatsappDisplay}\nEndereço: ${RESTAURANT.address}\n\nTaxa de entrega: ${money(RESTAURANT.deliveryFee)}`);
     };
 
     if(searchInput){
@@ -991,7 +962,7 @@
       openModal();
     };
 
-    // Modal wiring
+    // Modal events
     cMode.addEventListener("change", updateModeUI);
     cPay.addEventListener("change", updateChangeUI);
     cNeedChange.addEventListener("change", updateChangeUI);
@@ -1004,7 +975,6 @@
       if(entries.length===0){ alert("Seu carrinho está vazio 🙂"); closeModal(); return; }
       if(!validateCheckout()) return;
 
-      // sincroniza observações para o carrinho
       notesEl.value = cObs.value.trim();
 
       const msg = buildWhatsAppWithCustomer();
@@ -1013,20 +983,20 @@
       window.open(url,"_blank");
     });
 
-    function closeModalByClick(){ closeModal(); }
-    closeModalBtn.onclick = closeModalByClick;
-    modalBackdrop.onclick = closeModalByClick;
+    closeModalBtn.onclick = closeModal;
+    modalBackdrop.onclick = closeModal;
     backToCartBtn.onclick = ()=>{ closeModal(); openDrawer(); };
 
     document.addEventListener("keydown",(e)=>{
       if(e.key==="Escape" && modal.classList.contains("open")) closeModal();
     });
-// Init
+
+    // Initialize
     renderTabs();
     renderMenu();
     renderBadge();
     updateOpen();
-    setInterval(updateOpen, 60*1000);
+    setInterval(updateOpen, 60000);
   </script>
 </body>
 </html>
